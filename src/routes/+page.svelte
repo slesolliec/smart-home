@@ -1,2 +1,22 @@
-<h1>Welcome to SvelteKit</h1>
-<p>Visit <a href="https://kit.svelte.dev">kit.svelte.dev</a> to read the documentation</p>
+<script>
+
+import Room from "$lib/components/Room.svelte"
+
+
+/** @type {import('./$types').PageLoad} */
+export let data
+
+let rooms = data.rooms
+
+
+</script>
+
+
+
+<div class="house">
+  {#each rooms as room}
+    <Room room={room}></Room>
+  {/each}
+</div>
+
+

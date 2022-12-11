@@ -1,0 +1,25 @@
+
+
+div.house {
+  @apply grid grid-cols-2 sm:grid-cols-4
+}
+
+div.room {
+  @apply m-1 p-2 rounded-md bg-slate-500 text-white
+}
+
+div.power {
+  @apply float-left
+}
+
+div.temp-target {
+  @apply float-right leading-none
+}
+
+div.temp-current {
+  @apply clear-both text-4xl text-center
+}
+
+div.name {
+  @apply text-center text-lg leading-3
+}
