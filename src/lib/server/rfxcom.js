@@ -67,7 +67,7 @@ function receiveTemp(evt) {
     if (rooms[i].sensor == evt.id) {
       rooms[i].tempCurrent = evt.temperature
       rooms[i].humidity    = evt.humidity
-      console.log(rooms[i].name + ' updated to ' + evt.temperature + '°')
+      // console.log(rooms[i].name + ' updated to ' + evt.temperature + '°')
     }
   }
 }
