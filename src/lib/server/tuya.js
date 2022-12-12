@@ -1,12 +1,13 @@
 
-import rooms  from "$lib/server/rooms"
-import TuyAPI from 'tuyapi'
+import rooms      from "$lib/server/rooms"
+import TuyAPI     from 'tuyapi'
+import getTuyaKey from "$lib/server/tuya-keys"
 
 async function getAllData() {
   for (const i in rooms) {
     let room = rooms[i]
     if (room.tuyaId) {
-      const device = new TuyAPI({id: room.tuyaId, key: room.tuyaKey})
+      const device = new TuyAPI({id: room.tuyaId, key: getTuyaKey(room.tuyaId)})
       await device.find()
       await device.connect()
       const {dps} = await device.get({schema: true})
