@@ -64,6 +64,7 @@ function setTargetTemperatures() {
   // we loop on rooms
   for (const i in rooms) {
     let room = rooms[i]
+    room.tempTarget = 0
 
     // we loop on people
     for (const person of people) {
