@@ -3,6 +3,7 @@ import rooms  from "$lib/server/rooms"
 import people from "$lib/server/people"
 import week   from "$lib/server/week"
 
+import { switchPlug } from "$lib/server/tuya"
 
 
 function myCompare(hm1, hm2) {
@@ -23,6 +24,36 @@ function myCompare(hm1, hm2) {
   return false
 }
 
+
+async function switcher() {
+  console.log('switcher() called')
+
+  // we loop on rooms
+  for (const i in rooms) {
+    let room = rooms[i]
+
+    if (room.isSwitch) {
+      console.log(room.name)
+      console.log(room.tempCurrent)
+      console.log(room.tempTarget)
+
+      if (room.tempCurrent < room.tempTarget) {
+        if ( ! room.switchOn) {
+          console.log("faut switcher on")
+          switchPlug(true, room.tuyaId)
+
+        }
+      } else {
+        if (room.switchOn) {
+          console.log("faut switcher off")
+          switchPlug(false, room.tuyaId)
+
+        }
+      }
+    }
+  }
+
+}
 
 
 function setTargetTemperatures() {
@@ -63,6 +94,8 @@ function setTargetTemperatures() {
       }
     }
   }
+
+  switcher()
 }
 
 export { setTargetTemperatures }

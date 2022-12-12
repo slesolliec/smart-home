@@ -12,6 +12,14 @@ div.power {
   @apply float-left
 }
 
+div.power.on {
+  @apply opacity-100
+}
+
+div.power.off {
+  @apply opacity-40
+}
+
 div.temp-target {
   @apply float-right leading-none
 }
