@@ -23,3 +23,43 @@ div.temp-current {
 div.name {
   @apply text-center text-lg leading-3
 }
+
+div.people {
+  @apply mt-4 grid grid-cols-8
+}
+
+div.people div {
+  @apply m-1 p-2 rounded-md bg-slate-200 text-center opacity-50
+}
+
+.small-day {
+  @apply md:hidden
+}
+
+.long-day {
+  @apply hidden md:inline-block
+}
+
+.activity {
+  @apply first-letter:capitalize
+}
+
+div.people div.repos {
+  @apply bg-green-200
+}
+
+div.people div.teletravail {
+  @apply bg-orange-200
+}
+
+div.people div.angers {
+  @apply bg-red-200
+}
+
+div.people div.ecole {
+  @apply bg-red-200
+}
+
+div.people div.today {
+  @apply opacity-100
+}
