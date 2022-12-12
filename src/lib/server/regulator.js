@@ -33,9 +33,7 @@ async function switcher() {
     let room = rooms[i]
 
     if (room.isSwitch) {
-      console.log(room.name)
-      console.log(room.tempCurrent)
-      console.log(room.tempTarget)
+      console.log(room.name +' : '+ room.tempCurrent +' => '+ room.tempTarget)
 
       if (room.tempCurrent < room.tempTarget) {
         if ( ! room.switchOn) {
@@ -82,10 +80,10 @@ function setTargetTemperatures() {
           // temporary temperature target = temp target for the person
           let temptempTarget
           for (const h in r.hours) {
-            console.log(h + ' ' + hour)
+            // console.log(h + ' ' + hour)
             if (myCompare(h, hour)) {
-              console.log(h, hour)
-              console.log('temp temp target set to ' + r.hours[h])
+              // console.log(h, hour)
+              // console.log('temp temp target set to ' + r.hours[h])
               temptempTarget = r.hours[h]
             }
           }
