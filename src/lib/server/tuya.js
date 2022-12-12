@@ -3,6 +3,7 @@ import rooms      from "$lib/server/rooms"
 import TuyAPI     from 'tuyapi'
 import getTuyaKey from "$lib/server/tuya-keys"
 
+
 async function getAllData() {
   for (const i in rooms) {
     let room = rooms[i]
@@ -12,6 +13,7 @@ async function getAllData() {
       await device.connect()
       const {dps} = await device.get({schema: true})
       room.power = Math.floor(dps['19'] / 10)
+      room.switchOn = dps['1']
       
       let msg = room.name
       while (msg.length < 10) msg += ' '
@@ -31,7 +33,21 @@ async function getAllData() {
   }
 }
 
-export { getAllData }
+async function switchPlug(switchOn = true, tuyaId = '') {
+  const device = new TuyAPI({id: tuyaId, key: getTuyaKey(tuyaId)})
+  await device.find()
+  await device.connect()
+//  const status = await device.get()
+  if (switchOn) {
+    await device.set({set: true})
+  } else {
+    await device.set({set: false})
+  }
+  await device.disconnect()
+}
+
+
+export { getAllData, switchPlug }
 
 
 
