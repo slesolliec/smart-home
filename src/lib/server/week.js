@@ -1,16 +1,15 @@
 
-import { mag, lili } from "$lib/server/people"
 
 const week = [
   // dimanche
-  { mag: 'repos', lili: 'repos' },
+  { mag: 'repos',       lili: 'repos',  stef: 'repos' },
   // lundi
-  { mag: 'teletravail', lili: 'ecole' },
-  { mag: 'repos',       lili: 'ecole' },
-  { mag: 'repos',       lili: 'repos' },
-  { mag: 'angers',      lili: 'ecole' },
-  { mag: 'angers',      lili: 'ecole' },
-  { mag: 'repos',       lili: 'repos' },
+  { mag: 'teletravail', lili: 'ecole',  stef: 'matys' },
+  { mag: 'repos',       lili: 'ecole',  stef: 'matys' },
+  { mag: 'repos',       lili: 'repos',  stef: 'matys' },
+  { mag: 'angers',      lili: 'ecole',  stef: 'matys' },
+  { mag: 'angers',      lili: 'ecole',  stef: 'matys' },
+  { mag: 'repos',       lili: 'repos',  stef: 'repos' },
 
 ]
 
