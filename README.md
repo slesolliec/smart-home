@@ -36,3 +36,10 @@ npm run build
 You can preview the production build with `npm run preview`.
 
 > To deploy your app, you may need to install an [adapter](https://kit.svelte.dev/docs/adapters) for your target environment.
+
+# RFXcom
+
+Some interesting on testing RFXcom on Mac: [Test du RFXCOM Rfxtrx433e](https://rpidomotique.wordpress.com/2016/01/19/test-du-rfxcom-rfxtrx433e/)
+
+The [Virtual Communication Serial Port driver](https://ftdichip.com/drivers/vcp-drivers/).
+

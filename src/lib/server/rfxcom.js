@@ -3,6 +3,7 @@
 
 import rfxcom from 'rfxcom'
 import rooms  from '$lib/server/rooms'
+import log    from '$lib/server/log'
 
 const rfxtrx = new rfxcom.RfxCom("/dev/tty.usbserial-A1QBWMO", {debug: false})
 
@@ -67,7 +68,7 @@ function receiveTemp(evt) {
     if (rooms[i].sensor == evt.id) {
       rooms[i].tempCurrent = evt.temperature
       rooms[i].humidity    = evt.humidity
-      // console.log(rooms[i].name + ' updated to ' + evt.temperature + '°')
+      log.debug(rooms[i].name + ' updated to ' + evt.temperature + '°')
     }
   }
 }
