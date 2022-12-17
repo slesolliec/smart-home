@@ -14,7 +14,21 @@ let currentDay = new Date().getDay()
 
 const days = ['Dimanche', 'Lundi', 'Mardi', 'Mercredi', 'Jeudi', 'Vendredi', 'Samedi']
 
+function totalPower() {
+  let power = 0
+  for (const room of rooms) {
+    power += Number(room.power)
+  }
+  return power
+}
+
+
 </script>
+
+<div class="room">
+  Puissance totale : <strong>{totalPower()}W</strong>
+</div>
+
 
 <div class="house">
   {#each rooms as room}
