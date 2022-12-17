@@ -64,12 +64,19 @@ function receiveTemp(evt) {
   // console.log('received temp', evt)
   // console.log('rooms', rooms)
 
+  let found = false
+
   for (let i in rooms) {
     if (rooms[i].sensor == evt.id) {
       rooms[i].tempCurrent = evt.temperature
       rooms[i].humidity    = evt.humidity
       log.debug(rooms[i].name + ' updated to ' + evt.temperature + '°')
+      found = true
     }
+  }
+
+  if (! found) {
+    console.log('received temp', evt)
   }
 }
 
