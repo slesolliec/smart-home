@@ -30,7 +30,21 @@ async function getAllData() {
       console.log(msg)
       await device.disconnect()
     }
+
+    /*
+    if (room.tuyaSensor) {
+      console.log('getting temp from ' + room.name)
+      const device = new TuyAPI({id: room.tuyaSensor, key: getTuyaKey(room.tuyaSensor)})
+      await device.find()
+      await device.connect()
+      const {dps} = await device.get({schema: true})
+      console.log(dps)
+      await device.disconnect()
+    }
+    */
   }
+
+
 }
 
 async function switchPlug(switchOn = true, tuyaId = '') {
