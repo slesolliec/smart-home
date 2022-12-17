@@ -1,8 +1,9 @@
 
-import rooms      from "$lib/server/rooms"
-import TuyAPI     from 'tuyapi'
-import getTuyaKey from "$lib/server/tuya-keys"
-import log        from "$lib/server/log"
+import rooms         from "$lib/server/rooms"
+import TuyAPI        from 'tuyapi'
+import getTuyaKey    from "$lib/server/tuya-keys"
+import log           from "$lib/server/log"
+import { minString } from "$lib/utils"
 
 
 async function getAllData() {
@@ -19,13 +20,12 @@ async function getAllData() {
         room.power = Math.floor(dps['19'] / 10)
         room.switchOn = dps['1']
         
-        let msg = room.name
-        while (msg.length < 10) msg += ' '
+        let msg = minString(room.name, 9, true)
         msg += dps['1'] ? 'On  ' : 'Off '
-        msg += dps['17'] + '  '
-        msg += dps['18'] + ' mA  '
-        msg += Math.floor(dps['19'] / 10) + ' W  '
-        msg += Math.floor(dps['20'] / 10) + ' V  '
+        msg += minString(dps['17'], 3, false) + ' '
+        msg += minString(dps['18'], 4, false) + ' mA  '
+        msg += minString(Math.floor(dps['19'] / 10), 4, false) + ' W  '
+        msg += minString(Math.floor(dps['20'] / 10), 3, false) + ' V  '
         msg += dps['22'] + '  '
         msg += dps['23'] + '  '
         msg += dps['24'] + '  '

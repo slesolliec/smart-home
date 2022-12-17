@@ -35,12 +35,12 @@ async function switcher() {
     let room = rooms[i]
 
     if (room.isSwitch) {
-      log.debug(room.name +' : '+ room.tempCurrent +' => '+ room.tempTarget)
+      // log.debug(room.name +' : '+ room.tempCurrent +' => '+ room.tempTarget)
 
       if (room.tempCurrent < room.tempTarget) {
         // too cold
         if ( ! room.switchOn) {
-          log.info(`we switch ${room.name} On`)
+          log.info(`We switch ${room.name} On`)
           switchPlug(true, room.tuyaId)
           room.switchOn = true
 
