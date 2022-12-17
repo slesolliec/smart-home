@@ -60,7 +60,7 @@ async function switcher() {
 }
 
 
-function setTargetTemperatures() {
+function setTargetTemperatures(doSwitch = true) {
   const now = new Date()
   const hour = now.getHours() + 'h' + now.getMinutes()
   console.log('hour=' + hour)
@@ -100,7 +100,7 @@ function setTargetTemperatures() {
     }
   }
 
-  switcher()
+  if (doSwitch)  switcher()
 }
 
 export { setTargetTemperatures }

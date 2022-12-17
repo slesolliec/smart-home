@@ -19,6 +19,6 @@ if (! tuyaInterval) {
 }
 
 
-setTargetTemperatures()
+setTargetTemperatures(false)
 
 setInterval(setTargetTemperatures, 120 * 1000)
