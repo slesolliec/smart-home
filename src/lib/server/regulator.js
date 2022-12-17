@@ -84,7 +84,7 @@ function setTargetTemperatures() {
         if (r.name == room.name) {
 
           // temporary temperature target = temp target for the person
-          let temptempTarget
+          let temptempTarget = 0
           for (const h in r.hours) {
             // console.log(h + ' ' + hour)
             if (myCompare(h, hour)) {
