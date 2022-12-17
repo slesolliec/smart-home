@@ -27,7 +27,7 @@ const mag = {
     color: 'green',
     rooms: [
       { name: 'Chambre', hours: { '0h00': 15, '10h00': 17, '12h00': 15, '18h00': 17, '21h00': 15 }},
-      { name: 'Cuisine', hours: { '9h00': 17, '18h00': 18, '21h00': 12 }},
+      { name: 'Cuisine', hours: { '7h00': 15, '9h00': 17, '18h00': 18, '21h00': 12 }},
       { name: 'Salon',   hours: { '9h00': 17, '18h00': 18, '21h00': 12 }},
       { name: 'SdBain',  hours: { '9h00': 16, '21h00': 12 }},
     ]
