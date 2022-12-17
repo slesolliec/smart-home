@@ -37,7 +37,7 @@ div.people {
 }
 
 div.people div {
-  @apply m-1 p-2 rounded-md bg-slate-200 text-center opacity-50
+  @apply m-1 p-2 rounded-md bg-slate-200 text-center opacity-50 overflow-hidden
 }
 
 .small-day {
