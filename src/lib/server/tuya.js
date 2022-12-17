@@ -2,6 +2,7 @@
 import rooms      from "$lib/server/rooms"
 import TuyAPI     from 'tuyapi'
 import getTuyaKey from "$lib/server/tuya-keys"
+import log        from "$lib/server/log"
 
 
 async function getAllData() {
@@ -9,26 +10,33 @@ async function getAllData() {
     let room = rooms[i]
     if (room.tuyaId) {
       const device = new TuyAPI({id: room.tuyaId, key: getTuyaKey(room.tuyaId)})
-      await device.find()
-      await device.connect()
-      const {dps} = await device.get({schema: true})
-      room.power = Math.floor(dps['19'] / 10)
-      room.switchOn = dps['1']
-      
-      let msg = room.name
-      while (msg.length < 10) msg += ' '
-      msg += dps['1'] ? 'On  ' : 'Off '
-      msg += dps['17'] + '  '
-      msg += dps['18'] + ' mA  '
-      msg += Math.floor(dps['19'] / 10) + ' W  '
-      msg += Math.floor(dps['20'] / 10) + ' V  '
-      msg += dps['22'] + '  '
-      msg += dps['23'] + '  '
-      msg += dps['24'] + '  '
-      msg += dps['25'] + '  '
+      try {
+        await device.find()
+        await device.connect()
+        const {dps} = await device.get({schema: true})
+        await device.disconnect()
 
-      console.log(msg)
-      await device.disconnect()
+        room.power = Math.floor(dps['19'] / 10)
+        room.switchOn = dps['1']
+        
+        let msg = room.name
+        while (msg.length < 10) msg += ' '
+        msg += dps['1'] ? 'On  ' : 'Off '
+        msg += dps['17'] + '  '
+        msg += dps['18'] + ' mA  '
+        msg += Math.floor(dps['19'] / 10) + ' W  '
+        msg += Math.floor(dps['20'] / 10) + ' V  '
+        msg += dps['22'] + '  '
+        msg += dps['23'] + '  '
+        msg += dps['24'] + '  '
+        msg += dps['25'] + '  '
+  
+        log.tuya(msg)
+  
+      } catch (err) {
+        log.tuya("Failed getting state in " + room.name + ": " + err)
+        console.log(err)
+      }
     }
 
     /*
@@ -49,15 +57,20 @@ async function getAllData() {
 
 async function switchPlug(switchOn = true, tuyaId = '') {
   const device = new TuyAPI({id: tuyaId, key: getTuyaKey(tuyaId)})
-  await device.find()
-  await device.connect()
-//  const status = await device.get()
-  if (switchOn) {
-    await device.set({set: true})
-  } else {
-    await device.set({set: false})
+  try {
+    await device.find()
+    await device.connect()
+    //  const status = await device.get()
+    if (switchOn) {
+      await device.set({set: true})
+    } else {
+      await device.set({set: false})
+    }
+    await device.disconnect()
+  } catch (err) {
+    log.tuya("Failed switching " + switchOn ? 'On':'Off' + " device " + tuyaId + ': ' + err)
+    console.log(err)
   }
-  await device.disconnect()
 }
 
 

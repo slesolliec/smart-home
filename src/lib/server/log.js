@@ -39,5 +39,8 @@ log.error = function (msg, e) {
 	logger( colors.bold.red("[ERROR] ") + msg + (e || ''))
 }
 
+log.tuya = function (msg) {
+	logger(colors.magenta(msg))
+}
 
 export default log
