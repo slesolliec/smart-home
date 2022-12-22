@@ -61,21 +61,26 @@ rfxtrx.on('temperaturehumidity1', receiveTemp)
 
 async function receiveTemp(evt) {
 
-  const room = await Room.findOne({sensor: evt.id})
+  const room = await Room.findOne({ where: { sensor: evt.id}})
 
   if (! room) {
+    if (evt.id == '0xC00E') {
+      log.info('Temp outside is ' + evt.temperature + '°')
+      return
+    }
+
     log.warning('Could not find room with sensor ' + evt.id)
     console.log(evt)
     return
   }
 
-  Thermo.Create({
+  Thermo.create({
     room_id: room.room_id,
     temp:    evt.temperature * 10,
     hydro:   evt.humidity
   })
 
-  log.debug(room.name + ' updated to ' + evt.temperature + '°')
+  log.debug(minString(room.name, 10) + ' updated to ' + minString(evt.temperature, 4, false) + '°')
 }
 
 export { start }
