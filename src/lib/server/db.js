@@ -1,4 +1,7 @@
 import { Sequelize, DataTypes } from 'sequelize'
+
+import { defineRoom }           from './models/Room.js'
+import { defineThermo }         from './models/Thermo.js'
 import { defineUser }           from './models/User.js'
 
 const dbCnx = 'postgres://postgres:example@localhost:5435/house'
@@ -10,6 +13,8 @@ const sequelize = new Sequelize(dbCnx, {
 })
 
 // we instantiate our models
-const User = defineUser(sequelize, DataTypes)
+const User   = defineUser(  sequelize, DataTypes)
+const Room   = defineRoom(  sequelize, DataTypes)
+const Thermo = defineThermo(sequelize, DataTypes)
 
-export { sequelize, User }
+export { sequelize, User, Room, Thermo }
