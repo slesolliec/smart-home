@@ -18,7 +18,7 @@ function memoryUsed() {
 
 
 function logger(msg) {
-	console.log(new Date().toISOString().replace('T', ' ').slice(0, -1), colors.bold(memoryUsed()), msg);
+	console.log(colors.grey(new Date().toISOString().replace('T', ' ').slice(0, -1)), memoryUsed(), msg);
 }
 
 
