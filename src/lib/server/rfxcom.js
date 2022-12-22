@@ -80,7 +80,7 @@ async function receiveTemp(evt) {
     hydro:   evt.humidity
   })
 
-  log.debug(minString(room.name, 10) + ' updated to ' + minString(evt.temperature, 4, false) + '°')
+  log.debug(minString(room.name, 8) + ' updated to ' + minString(evt.temperature, 4, false) + '°')
 }
 
 export { start }
