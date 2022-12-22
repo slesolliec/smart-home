@@ -1,6 +1,7 @@
 import { Sequelize, DataTypes } from 'sequelize'
 
 import { defineRoom }           from './models/Room.js'
+import { defineRoomCurrent } from './models/RoomCurrent.js'
 import { defineThermo }         from './models/Thermo.js'
 import { defineUser }           from './models/User.js'
 
@@ -13,8 +14,9 @@ const sequelize = new Sequelize(dbCnx, {
 })
 
 // we instantiate our models
-const User   = defineUser(  sequelize, DataTypes)
-const Room   = defineRoom(  sequelize, DataTypes)
-const Thermo = defineThermo(sequelize, DataTypes)
+const User        = defineUser(        sequelize, DataTypes)
+const Room        = defineRoom(        sequelize, DataTypes)
+const RoomCurrent = defineRoomCurrent( sequelize, DataTypes)  // view
+const Thermo      = defineThermo(      sequelize, DataTypes)
 
-export { sequelize, User, Room, Thermo }
+export { sequelize, User, Room, RoomCurrent, Thermo }
