@@ -9,6 +9,8 @@ const defineRoomCurrent = function(sequelize, DataTypes) {
         smart_plug: { type: DataTypes.CHAR(22)},
         temp:       { type: DataTypes.SMALLINT},
         hydro:      { type: DataTypes.SMALLINT},
+        is_on:      { type: DataTypes.BOOLEAN},
+        power:      { type: DataTypes.SMALLINT},
         created_at: { type: DataTypes.DATE},
       },
       {

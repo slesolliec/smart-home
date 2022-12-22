@@ -15,11 +15,17 @@ export let room = {
 
 
 <div class="room">
-  {#if room.tuyaId != ''}
-    <div class={room.switchOn ? 'power on' : 'power off' }>{room.power}W</div>
+  {#if room.smart_plug}
+    <div class={room.is_on ? 'power on' : 'power off' }>{room.power}W</div>
   {/if}
   <div class="temp-target">{room.tempTarget}°</div>
-  <div class="temp-current">{room.tempCurrent}°</div>
+  <div class="temp-current">
+    {#if room.temp}
+      {String(room.temp).slice(0, -1)}<small>.{String(room.temp).slice(-1)}</small>°
+    {:else}
+      ??°
+    {/if}
+  </div>
   <div class="name">{room.name}</div>
 </div>
 
