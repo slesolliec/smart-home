@@ -1,7 +1,8 @@
 import { Sequelize, DataTypes } from 'sequelize'
 
 import { defineRoom }           from './models/Room.js'
-import { defineRoomCurrent } from './models/RoomCurrent.js'
+import { defineRoomCurrent }    from './models/RoomCurrent.js'
+import { defineSmartPlug }      from './models/SmartPlug.js'
 import { defineThermo }         from './models/Thermo.js'
 import { defineUser }           from './models/User.js'
 
@@ -18,5 +19,6 @@ const User        = defineUser(        sequelize, DataTypes)
 const Room        = defineRoom(        sequelize, DataTypes)
 const RoomCurrent = defineRoomCurrent( sequelize, DataTypes)  // view
 const Thermo      = defineThermo(      sequelize, DataTypes)
+const SmartPlug   = defineSmartPlug(   sequelize, DataTypes)
 
-export { sequelize, User, Room, RoomCurrent, Thermo }
+export { sequelize, User, Room, RoomCurrent, SmartPlug, Thermo }
