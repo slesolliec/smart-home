@@ -1,0 +1,19 @@
+version: '3'
+
+services:
+
+  pg-house:
+    image: postgres:15
+    restart: always
+    hostname: pg-house
+    environment:
+      POSTGRES_PASSWORD: example
+    ports:
+      - 5435:5432
+    volumes:
+      - ../data/pg-house:/var/lib/postgresql/data
+      
+networks:
+  default:
+    name: house
+

@@ -1,10 +1,9 @@
 // rfxcom will receive the room state object from hook.server.js
 
-
 import rfxcom from 'rfxcom'
-import rooms  from '$lib/server/rooms'
 import log    from '$lib/server/log'
 import { minString } from '$lib/utils'
+import { Room, Thermo } from './db'
 
 const rfxtrx = new rfxcom.RfxCom("/dev/tty.usbserial-A1QBWMO", {debug: false})
 
@@ -60,25 +59,23 @@ rfxtrx.on('receive', function(evt) {
 rfxtrx.on('temperaturehumidity1', receiveTemp)
 
 
-function receiveTemp(evt) {
+async function receiveTemp(evt) {
 
-  // console.log('received temp', evt)
-  // console.log('rooms', rooms)
+  const room = await Room.findOne({sensor: evt.id})
 
-  let found = false
-
-  for (let i in rooms) {
-    if (rooms[i].sensor == evt.id) {
-      rooms[i].tempCurrent = evt.temperature
-      rooms[i].humidity    = evt.humidity
-      log.debug(minString(rooms[i].name, 9) + 'updated to ' + minString(evt.temperature, 4, false) + '°')
-      found = true
-    }
+  if (! room) {
+    log.warning('Could not find room with sensor ' + evt.id)
+    console.log(evt)
+    return
   }
 
-  if (! found) {
-    console.log('received temp', evt)
-  }
+  Thermo.Create({
+    room_id: room.room_id,
+    temp:    evt.temperature * 10,
+    hydro:   evt.humidity
+  })
+
+  log.debug(room.name + ' updated to ' + evt.temperature + '°')
 }
 
 export { start }
