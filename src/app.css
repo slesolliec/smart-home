@@ -1,4 +1,7 @@
 
+button {
+  @apply m-1 px-3 py-1 rounded-full shadow border-none hover:shadow-md hover:font-bold hover:cursor-pointer;
+}
 
 div.house {
   @apply grid grid-cols-2 sm:grid-cols-4
@@ -52,24 +55,20 @@ div.people div {
   @apply first-letter:capitalize
 }
 
-div.people div.repos {
+div.people div.repos, button.repos {
   @apply bg-green-200
 }
 
-div.people div.teletravail {
+div.people div.telework, button.telework {
   @apply bg-orange-200
 }
 
-div.people div.matys {
-  @apply bg-orange-200
-}
-
-div.people div.angers {
+div.people div.ecole, button.ecole {
   @apply bg-red-200
 }
 
-div.people div.ecole {
-  @apply bg-red-200
+div.people div.away, button.away {
+  @apply bg-slate-200
 }
 
 div.people div.today {
