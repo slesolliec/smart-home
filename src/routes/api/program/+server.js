@@ -1,5 +1,5 @@
 
-import { Week }     from '$lib/server/db'
+import { Program, Week }     from '$lib/server/db'
 import log          from '$lib/server/log'
 import { redirect } from '@sveltejs/kit'
 
@@ -11,28 +11,18 @@ export async function POST({request}) {
   const data = await request.formData()
   console.log(data)
 
-  /*
-  log.debug(`set mode ${data.get('mode_id')} for user ${data.get('user_id')} on weekday ${data.get('weekday')}`)
+  // log.debug(`set mode ${data.get('mode_id')} for user ${data.get('user_id')} on weekday ${data.get('weekday')}`)
 
-  // get user/day
-  const userDay = await Week.findOne({where: {
-    user_id: data.get('user_id'),
-    weekday: data.get('weekday')
-  }})
+  if (data.get('action') == 'add') {
+    await addTemp(data)
+  } else {
+    const [action, hour] = data.get('action').split('-')
 
-  if (userDay) {
-    userDay.mode_id = data.get('mode_id')
-    userDay.save()
-    throw redirect(302, '/')
+    if (action == 'change') await changeTemp(data, hour)
+    if (action == 'delete') await deleteTemp(data, hour)
   }
 
-  Week.create({
-    user_id: data.get('user_id'),
-    weekday: data.get('weekday'),
-    mode_id: data.get('mode_id')
-  })
 
-  */
 
   let url = []
   if (data.get('selected_user') > -1) url.push('user=' + data.get('selected_user')) 
@@ -42,4 +32,61 @@ export async function POST({request}) {
   if (url) throw redirect(302, '/program?' + url.join('&'))
 
   throw redirect(302, '/program')
+}
+
+
+async function addTemp(data) {
+  // get user/day
+  const program = await Program.findOne({where: {
+    user_id: data.get('user_id'),
+    mode_id: data.get('mode_id'),
+    room_id: data.get('room_id'),
+    hour:    Number(data.get('hour').split(':').join(''))
+  }})
+
+  if (program) {
+    program.temp = data.get('temp')
+    await program.save()
+  } else {
+    await Program.create({
+      user_id: data.get('user_id'),
+      room_id: data.get('room_id'),
+      mode_id: data.get('mode_id'),
+      hour: Number(data.get('hour').split(':').join('')),
+      temp:  data.get('temp')
+    })
+  }
+}
+
+async function changeTemp(data, hour) {
+  // get user/day
+  const program = await Program.findOne({where: {
+    user_id: data.get('user_id'),
+    mode_id: data.get('mode_id'),
+    room_id: data.get('room_id'),
+    hour:  hour
+  }})
+
+  if (program) {
+    program.temp = data.get('temp-' + hour)
+    await program.save()
+  } else {
+    await Program.create({
+      user_id: data.get('user_id'),
+      room_id: data.get('room_id'),
+      mode_id: data.get('mode_id'),
+      hour: hour,
+      temp:  data.get('temp-' + hour)
+    })
+  }
+}
+
+
+async function deleteTemp(data, hour) {
+  await Program.destroy({where: {
+    user_id: data.get('user_id'),
+    mode_id: data.get('mode_id'),
+    room_id: data.get('room_id'),
+    hour:  hour
+  }})
 }

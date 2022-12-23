@@ -1,6 +1,7 @@
 
 // import people from "$lib/server/people"
-import { Mode, RoomCurrent, User, Week } from "$lib/server/db"
+import { Mode, RoomCurrent, User, Week, Program } from "$lib/server/db"
+import { Op } from "sequelize"
 
 /** @type {import('./$types').PageServerLoad} */
 export async function load({url}) {
@@ -14,13 +15,15 @@ export async function load({url}) {
   if (search.get('room')) selected.room = search.get('room')
 
 
-  const rooms  = JSON.parse(JSON.stringify(await RoomCurrent.findAll()))
+  const rooms  = JSON.parse(JSON.stringify(await RoomCurrent.findAll({where: {
+    smart_plug: {[Op.not]: ''}
+  }})))
   const modes  = JSON.parse(JSON.stringify(await Mode.findAll()))
 
   const people = JSON.parse(JSON.stringify(await User.findAll({
     include: {
-      model: Week,
-      include: Mode
+      model: Program,
+      order: ['mode_id', 'room_id', 'hour']
     },
     order: ['user_id']
   })))
