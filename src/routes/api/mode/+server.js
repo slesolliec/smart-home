@@ -1,6 +1,7 @@
 
 import { Week } from '$lib/server/db'
-import { json, error, redirect } from '@sveltejs/kit'
+import log from '$lib/server/log'
+import { redirect } from '@sveltejs/kit'
 
 
 
@@ -8,7 +9,8 @@ import { json, error, redirect } from '@sveltejs/kit'
 export async function POST({request}) {
 
   const data = await request.formData()
-  console.log(data)
+  // console.log(data)
+  log.debug(`set mode ${data.get('mode_id')} for user ${data.get('user_id')} on weekday ${data.get('weekday')}`)
 
   // get user/day
   const userDay = await Week.findOne({where: {

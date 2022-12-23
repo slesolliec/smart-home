@@ -6,6 +6,7 @@ async function dbSync() {
   await Week  .sync({force: true})
 
   Mode.bulkCreate([
+    {mode_id: 0, name: 'Base'},
     {mode_id: 1, name: 'Repos'},
     {mode_id: 2, name: 'TeleWork'},
     {mode_id: 3, name: 'Ecole'},
