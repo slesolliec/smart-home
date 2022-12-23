@@ -1,16 +1,28 @@
 
-import { Room, SmartPlug, Thermo, User } from "./src/lib/server/db.js"
+import { Mode, Room, SmartPlug, Thermo, User, Week } from "./src/lib/server/db.js"
 
 async function dbSync() {
-//  await User  .sync({force: true})
-//  await Room  .sync({force: true})
-//  await Thermo.sync({force: true})
-  await SmartPlug.sync({force: true})
+  await Mode  .sync({force: true})
+  await Week  .sync({force: true})
+
+  Mode.bulkCreate([
+    {mode_id: 1, name: 'Repos'},
+    {mode_id: 2, name: 'TeleWork'},
+    {mode_id: 3, name: 'Ecole'},
+    {mode_id: 4, name: 'Away'},
+  ])
 
   return
 
+  await User  .sync({force: true})
+  await Room  .sync({force: true})
+  await Thermo.sync({force: true})
+  await SmartPlug.sync({force: true})
+
+
   // standing data
-  
+
+
   Room.bulkCreate([
     {room_id:  1, name: 'Matys',   sensor: '0xFF01', smart_plug: 'bfb7fd9135eb2dd73egztw'},
     {room_id:  2, name: 'Palier',  sensor: '0x7801', },
