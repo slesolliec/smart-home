@@ -6,9 +6,12 @@ import week   from "$lib/server/week"
 import log    from "$lib/server/log"
 
 import { switchPlug } from "$lib/server/tuya"
+import { Room, RoomCurrent } from "./db"
+import { minString } from "$lib/utils"
 
 
 function myCompare(hm1, hm2) {
+  // console.log(hm1, hm2)
   let [h1, m1] = hm1.split('h')
   let [h2, m2] = hm2.split('h')
 
@@ -35,35 +38,32 @@ async function switcher() {
     let room = rooms[i]
 
     if (room.isSwitch) {
-      // log.debug(room.name +' : '+ room.tempCurrent +' => '+ room.tempTarget)
+      const dbRoom = await RoomCurrent.findOne({where: {room_id: room.room_id}})
 
-      if (room.tempCurrent < room.tempTarget) {
+      log.debug(room.name +' : '+ (dbRoom.temp / 10) +' => '+ room.tempTarget)
+
+      if ( (dbRoom.temp / 10) < room.tempTarget) {
         // too cold
-        if ( ! room.switchOn) {
+        if ( ! dbRoom.is_on) {
           log.info(`We switch ${room.name} On`)
-          switchPlug(true, room.tuyaId)
-          room.switchOn = true
-
+          switchPlug(true, dbRoom.smart_plug)
         }
       } else {
         // too hot
-        if (room.switchOn) {
+        if (dbRoom.is_on) {
           log.info(`we switch ${room.name} Off`)
-          switchPlug(false, room.tuyaId)
-          room.switchOn = false
-
+          switchPlug(false, dbRoom.smart_plug)
         }
       }
     }
   }
-
 }
 
 
 function setTargetTemperatures(doSwitch = true) {
   const now = new Date()
   const hour = now.getHours() + 'h' + now.getMinutes()
-  console.log('hour=' + hour)
+  console.log('SetTargetTemperatures() called at ' + hour)
 
   // we loop on rooms
   for (const i in rooms) {
@@ -98,6 +98,7 @@ function setTargetTemperatures(doSwitch = true) {
         }
       }
     }
+    log.info(minString(room.name, 9) + 'target is ' + room.tempTarget + '°')
   }
 
   if (doSwitch)  switcher()
