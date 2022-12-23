@@ -1,7 +1,12 @@
 
-import { Mode, Room, SmartPlug, Thermo, User, Week } from "./src/lib/server/db.js"
+import { Mode, Room, SmartPlug, Thermo, User, Week, Program } from "./src/lib/server/db.js"
 
 async function dbSync() {
+
+  await Program.sync({force: true})
+
+  return
+
   await Mode  .sync({force: true})
   await Week  .sync({force: true})
 
