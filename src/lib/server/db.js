@@ -25,4 +25,10 @@ const Thermo      = defineThermo(      sequelize, DataTypes)
 const SmartPlug   = defineSmartPlug(   sequelize, DataTypes)
 const Week        = defineWeek(        sequelize, DataTypes)
 
+Week.belongsTo(User, {sourceKey: 'user_id', foreignKey: 'user_id'})
+User.hasMany(Week,   {sourceKey: 'user_id', foreignKey: 'user_id'})
+
+Week.belongsTo(Mode, {sourceKey: 'mode_id', foreignKey: 'mode_id'})
+Mode.hasMany(Week,   {sourceKey: 'mode_id', foreignKey: 'mode_id'})
+
 export { sequelize, Mode, User, Room, RoomCurrent, SmartPlug, Thermo, Week }
