@@ -9,8 +9,9 @@ export let data
 
 let rooms  = data.rooms
 let people = data.people
-let week   = data.week
 let modes  = data.modes
+
+// console.log(people)
 
 let chooseUser = 1
 let chooseDay  = 0
@@ -67,8 +68,8 @@ async function chooseMode(mode_id) {
     <div class="bold">{person.name}</div>
     {#each [1, 2, 3, 4, 5, 6, 0] as day}
       <div on:click={() => choose(person.user_id, day)}
-          class={'activity ' + week[day][person.name.toLowerCase()] + (currentDay == day ? ' today' : '')}>
-        {week[day][person.name.toLowerCase()]}
+          class={'activity ' + person.Weeks.find(e => e.weekday == day)?.Mode.name.toLowerCase() || '' + (currentDay == day ? ' today' : '')}>
+        {person.Weeks.find(e => e.weekday == day)?.Mode.name || ''}
       </div>
     {/each}
   {/each}
