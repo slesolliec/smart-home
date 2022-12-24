@@ -74,3 +74,7 @@ div.people div.away, button.away {
 div.people div.today {
   @apply opacity-100
 }
+
+.room a {
+  @apply text-white;
+}

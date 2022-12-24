@@ -4,7 +4,10 @@ export let room = {
   name:        "my room",
   power:       0,
   switchOn:    false,
-  tempTarget:  15,
+  target:  {
+    temp: 10,
+    user_id: 1
+  },
   tempCurrent: 10,
   tuyaId:      ''
 }
@@ -19,7 +22,7 @@ export let room = {
     <div class={room.is_on ? 'power on' : 'power off' }>{room.power}W</div>
   {/if}
   {#if room.smart_plug}
-  <div class="temp-target">{room.tempTarget}°</div>
+  <div class="temp-target">{room.target.temp}°</div>
   {/if}
   <div class="temp-current">
     {#if room.temp}

@@ -75,6 +75,12 @@ async function chooseMode(mode_id) {
   {/each}
 </div>
 
+<div class="room">
+  <a href="/program">Program</a>
+</div>
+
+
+
 <Modal id="modal-choose-mode">
   <div class="modal-choose">
     <div style="margin-bottom: 8px; text-align: center; font-weight: bold;">{people.filter((p) => p.user_id == chooseUser)[0].name} - {days[chooseDay]}</div>
