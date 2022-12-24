@@ -4,18 +4,20 @@ import log  from "$lib/server/log"
 
 import { switchPlug }  from "$lib/server/tuya"
 import { RoomCurrent } from "$lib/server/db"
-import { rooms }       from "$lib/server/state"
+import { getState }       from "$lib/server/state"
 
 
 
 async function switcher() {
   log.debug('switcher() called')
 
+  let rooms = await getState()
+
   // we loop on rooms
   for (const i in rooms) {
     let room = rooms[i]
 
-    if (room.isSwitch) {
+    if (room.smart_plug) {
       const dbRoom = await RoomCurrent.findOne({where: {room_id: room.room_id}})
 
       log.debug(room.name +' : '+ (dbRoom.temp / 10) +' => '+ room.tempTarget)

@@ -4,74 +4,78 @@ import { Mode, RoomCurrent, User, Week, Program } from "$lib/server/db"
 import log from "$lib/server/log"
 
 
-const now = new Date()
-let nowTime = 0
+async function getState() {
 
-if (now.getMinutes() < 10) {
-nowTime = Number(now.getHours().toString() + '0' + now.getMinutes().toString())
-} else {
-nowTime = Number(now.getHours().toString() + now.getMinutes().toString())
-}
+  const now = new Date()
+  let nowTime = 0
 
-const rooms  = JSON.parse(JSON.stringify(await RoomCurrent.findAll()))
-
-const people = JSON.parse(JSON.stringify(await User.findAll({
-include: {
-  model: Week,
-  include: Mode
-},
-order: ['user_id']
-})))
-
-const allTargets = []
-
-// we loop on rooms
-for (const room of rooms) {
-
-  let targetTemp = {
-    temp: 0,
-    user_id: -1
+  if (now.getMinutes() < 10) {
+    nowTime = Number(now.getHours().toString() + '0' + now.getMinutes().toString())
+  } else {
+    nowTime = Number(now.getHours().toString() + now.getMinutes().toString())
   }
 
-  // we loop on people
-  for (const person of people) {
+  const rooms  = JSON.parse(JSON.stringify(await RoomCurrent.findAll()))
 
-    const userMode = await Week.findOne({
-      where: {
-        user_id: person.user_id,
-        weekday: now.getDay()
-      }
-    })
+  const people = JSON.parse(JSON.stringify(await User.findAll({
+    include: {
+      model: Week,
+      include: Mode
+    },
+    order: ['user_id']
+  })))
 
-    if (userMode) {
+  const allTargets = []
 
-      let userTarget = (await Program.findOne({
+  // we loop on rooms
+  for (const room of rooms) {
+
+    let targetTemp = {
+      temp: 0,
+      user_id: -1
+    }
+
+    // we loop on people
+    for (const person of people) {
+
+      const userMode = await Week.findOne({
         where: {
           user_id: person.user_id,
-          room_id: room.room_id,
-          mode_id: userMode.mode_id,
-          hour: {
-            [Op.lt]: nowTime
+          weekday: now.getDay()
+        }
+      })
+
+      if (userMode) {
+
+        let userTarget = (await Program.findOne({
+          where: {
+            user_id: person.user_id,
+            room_id: room.room_id,
+            mode_id: userMode.mode_id,
+            hour: {
+              [Op.lt]: nowTime
+            }
+          },
+          order: [['hour', 'DESC']],
+          limit: 1,
+        }))
+
+        if (userTarget) {
+
+          if (userTarget.temp > targetTemp.temp) {
+            targetTemp.temp = userTarget.temp
+            targetTemp.user_id = userTarget.user_id
           }
-        },
-        order: [['hour', 'DESC']],
-        limit: 1,
-      }))
-
-      if (userTarget) {
-
-        if (userTarget.temp > targetTemp.temp) {
-          targetTemp.temp = userTarget.temp
-          targetTemp.user_id = userTarget.user_id
         }
       }
     }
+
+    // log.debug('Target for room ' + room.name + ' is ' + targetTemp.temp + ' by ' + targetTemp.user_id)
+
+    room.target = targetTemp
   }
 
-  log.debug('Target for room ' + room.name + ' is ' + targetTemp.temp + ' by ' + targetTemp.user_id)
-
-  room.target = targetTemp
+  return rooms
 }
 
-
-export { rooms, people }
+export { getState }

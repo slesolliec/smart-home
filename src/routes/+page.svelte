@@ -1,17 +1,24 @@
 <script>
 
+import { browser }         from "$app/environment";
 import Modal, { getModal } from "$lib/components/Modal.svelte"
 import Room                from "$lib/components/Room.svelte"
 
+let rooms = []
+let people = [] // data.people
+let modes  = [] // data.modes
 
-/** @type {import('./$types').PageLoad} */
-export let data
+async function getData() {
+  if ( ! browser) return
+  const data = await (await fetch('/api/house')).json()
 
-let rooms  = data.rooms
-let people = data.people
-let modes  = data.modes
+  people = data.people
+  modes  = data.modes
+  rooms  = data.rooms
+}
 
-// console.log(people)
+getData()
+
 
 let chooseUser = 1
 let chooseDay  = 0
@@ -83,7 +90,7 @@ async function chooseMode(mode_id) {
 
 <Modal id="modal-choose-mode">
   <div class="modal-choose">
-    <div style="margin-bottom: 8px; text-align: center; font-weight: bold;">{people.filter((p) => p.user_id == chooseUser)[0].name} - {days[chooseDay]}</div>
+    <div style="margin-bottom: 8px; text-align: center; font-weight: bold;">{people.filter((p) => p.user_id == chooseUser)[0]?.name} - {days[chooseDay]}</div>
 
     <form method="post" action="/api/mode">
       <input type="hidden" name="user_id" value={chooseUser}/>
