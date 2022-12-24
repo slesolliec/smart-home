@@ -1,6 +1,6 @@
 
 button {
-  @apply m-1 px-3 py-1 rounded-full shadow border-none hover:shadow-md hover:font-bold hover:cursor-pointer;
+  @apply m-0.5 px-3 py-1 rounded-full shadow border-none hover:shadow-md hover:font-bold hover:cursor-pointer;
 }
 
 div.house {
@@ -43,6 +43,10 @@ div.people div {
   @apply m-1 p-2 rounded-md bg-slate-200 text-center opacity-50 overflow-hidden
 }
 
+div.people div.activity {
+  @apply cursor-pointer
+}
+
 .small-day {
   @apply md:hidden
 }
@@ -77,4 +81,9 @@ div.people div.today {
 
 .room a {
   @apply text-white;
+}
+
+div.modal-choose button {
+  @apply pt-2 pb-1.5;
+  width: 100px;
 }

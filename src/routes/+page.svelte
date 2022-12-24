@@ -4,9 +4,10 @@ import { browser }         from "$app/environment";
 import Modal, { getModal } from "$lib/components/Modal.svelte"
 import Room                from "$lib/components/Room.svelte"
 
-let rooms = []
+let rooms  = []
 let people = [] // data.people
 let modes  = [] // data.modes
+let power  = 0
 
 async function getData() {
   if ( ! browser) return
@@ -15,6 +16,8 @@ async function getData() {
   people = data.people
   modes  = data.modes
   rooms  = data.rooms
+
+  power = totalPower()
 }
 
 getData()
@@ -53,7 +56,7 @@ async function chooseMode(mode_id) {
 </script>
 
 <div class="room">
-  Puissance totale : <strong>{totalPower()}W</strong>
+  Puissance totale : <strong>{power}W</strong>
 </div>
 
 
@@ -75,7 +78,7 @@ async function chooseMode(mode_id) {
     <div class="bold">{person.name}</div>
     {#each [1, 2, 3, 4, 5, 6, 0] as day}
       <div on:click={() => choose(person.user_id, day)}
-          class={'activity ' + person.Weeks.find(e => e.weekday == day)?.Mode.name.toLowerCase() || '' + (currentDay == day ? ' today' : '')}>
+          class={'activity ' + (person.Weeks.find(e => e.weekday == day)?.Mode.name.toLowerCase() || '') + (currentDay == day ? ' today' : '')}>
         {person.Weeks.find(e => e.weekday == day)?.Mode.name || ''}
       </div>
     {/each}
@@ -104,16 +107,3 @@ async function chooseMode(mode_id) {
     </form>
   </div>
 </Modal>
-
-<style>
-
-div.activity {
-  @apply hover:cursor-pointer;
-}
-
-div.modal-choose button {
-  @apply pt-2 pb-1.5;
-  width: 100px;
-}
-
-</style>
