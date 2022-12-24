@@ -25,7 +25,7 @@ async function getAllData() {
         room_id: room.room_id,
         is_on: dps['1'],
         power: Math.floor(dps['19'] / 10),
-        dps_22: dps['22'],
+        dps_22: dps['17'] || 0,
         dps_23: dps['23'],
         dps_24: dps['24'],
         dps_25: dps['25'],

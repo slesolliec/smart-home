@@ -1,10 +1,9 @@
-
-
 import log  from "$lib/server/log"
 
-import { switchPlug }  from "$lib/server/tuya"
-import { RoomCurrent } from "$lib/server/db"
-import { getState }       from "$lib/server/state"
+import { switchPlug }        from "$lib/server/tuya"
+import { RoomCurrent }       from "$lib/server/db"
+import { getState }          from "$lib/server/state"
+import { switchVentilation } from "$lib/server/rfxcom"
 
 
 
@@ -20,7 +19,7 @@ async function switcher() {
     if (room.smart_plug) {
       const dbRoom = await RoomCurrent.findOne({where: {room_id: room.room_id}})
 
-      log.debug(room.name +' : '+ (dbRoom.temp / 10) +' => '+ room.tempTarget)
+      log.debug(room.name +' : '+ (dbRoom.temp / 10) +' => '+ room.target.temp)
 
       if ( (dbRoom.temp / 10) < room.target.temp) {
         // too cold
@@ -40,10 +39,17 @@ async function switcher() {
 }
 
 
-function setTargetTemperatures(doSwitch = true) {
+async function switchVent() {
+  const SdBain = await RoomCurrent.findOne({where: {room_id: 7}})
 
-  if (doSwitch)  switcher()
+  console.log('Hydro SdBain =', SdBain.hydro)
+
+  if (SdBain.hydro > 75) {
+    switchVentilation(true)
+  } else {
+    switchVentilation(false)
+  }
 }
 
-export { setTargetTemperatures }
 
+export { switcher, switchVent }

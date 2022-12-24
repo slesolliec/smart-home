@@ -1,6 +1,6 @@
 // we get the room state object and pass it to rfxcom
 
-import { setTargetTemperatures } from "$lib/server/regulator"
+import { switcher, switchVent }  from "$lib/server/regulator"
 import { start }                 from "$lib/server/rfxcom"
 import { getAllData }            from "$lib/server/tuya"
 
@@ -19,6 +19,7 @@ if (! tuyaInterval) {
 }
 
 
-setTargetTemperatures(false)
+switcher(false)
 
-setInterval(setTargetTemperatures, 120 * 1000)
+setInterval(switcher,   300 * 1000)
+setInterval(switchVent, 300 * 1000)

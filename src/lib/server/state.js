@@ -15,7 +15,7 @@ async function getState() {
     nowTime = Number(now.getHours().toString() + now.getMinutes().toString())
   }
 
-  const rooms  = JSON.parse(JSON.stringify(await RoomCurrent.findAll()))
+  const rooms  = JSON.parse(JSON.stringify(await RoomCurrent.findAll({order: ['room_id']})))
 
   const people = JSON.parse(JSON.stringify(await User.findAll({
     include: {

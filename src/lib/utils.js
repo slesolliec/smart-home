@@ -1,6 +1,11 @@
 
 function minString(str, min = 5, padRight = true) {
-  str = str.toString()
+  try {
+    str = str.toString()
+  } catch (err) {
+    console.log("minString() Could not convert", str, "to string")
+    str = '[ERR]'
+  }
   while (str.length < min) {
     if (padRight) {
       str += ' '

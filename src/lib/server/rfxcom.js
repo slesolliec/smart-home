@@ -1,11 +1,12 @@
 // rfxcom will receive the room state object from hook.server.js
 
-import rfxcom from 'rfxcom'
+import rfxcom, { Lighting2 } from 'rfxcom'
 import log    from '$lib/server/log'
 import { minString } from '$lib/utils'
 import { Room, Thermo } from './db'
 
 const rfxtrx = new rfxcom.RfxCom("/dev/tty.usbserial-A1QBWMO", {debug: false})
+const telecommande = new Lighting2(rfxtrx, rfxcom.lighting2.AC)
 
 // const velux = new rfxcom.Rfy(rfxtrx, rfxcom.rfy.RFY)
 
@@ -83,4 +84,13 @@ async function receiveTemp(evt) {
   log.debug(minString(room.name, 8) + ' updated to ' + minString(evt.temperature, 4, false) + '°')
 }
 
-export { start }
+function switchVentilation(switchOn = false) {
+  if (switchOn) {
+    telecommande.switchOn("0x25072F/13")
+  } else {
+    telecommande.switchOff("0x25072F/13")
+  }
+}
+
+
+export { start, switchVentilation }
