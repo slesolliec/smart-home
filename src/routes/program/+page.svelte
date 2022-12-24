@@ -17,10 +17,6 @@
   let selectedRoom   = data.selected.room || -1
   let selectedMode   = data.selected.mode || -1
 
-  function hourSort(p1, p2) {
-    console.log(p1.hour, p2.hour)
-    return p1.hour - p2.hour
-  }
   
   </script>
   
@@ -75,7 +71,10 @@
           <input type="hidden" name="mode_id" value={mode.mode_id} />
           <input type="hidden" name="room_id" value={room.room_id} />
 
-          {#each person.Programs.filter((e) => e.mode_id == mode.mode_id).filter((e) => e.room_id == room.room_id).sort(hourSort) as program}
+          {#each person.Programs
+              .filter((e) => e.mode_id == mode.mode_id)
+              .filter((e) => e.room_id == room.room_id)
+              .sort((a, b) => a.hour - b.hour) as program}
             <div class="hour">
               {((program.hour < 1000) ? '0' : '') + program.hour.toString().slice(0, -2) + ':' + program.hour.toString().slice(-2)}
             </div>
