@@ -3,6 +3,8 @@ import { Mode, Room, SmartPlug, Thermo, User, Week, Program } from "./src/lib/se
 
 async function dbSync() {
 
+  return
+
   await Mode   .sync({force: true})
   await Week   .sync({force: true})
   await Program.sync({force: true})
