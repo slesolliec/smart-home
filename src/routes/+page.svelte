@@ -75,7 +75,7 @@ async function chooseMode(mode_id) {
   {/each}
 
   {#each people as person}
-    <div class="bold">{person.name}</div>
+    <div class="bold"><a href={'/program?user=' + person.user_id}>{person.name}</a></div>
     {#each [1, 2, 3, 4, 5, 6, 0] as day}
       <div on:click={() => choose(person.user_id, day)}
           class={'activity ' + (person.Weeks.find(e => e.weekday == day)?.Mode.name.toLowerCase() || '') + (currentDay == day ? ' today' : '')}>

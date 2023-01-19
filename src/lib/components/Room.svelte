@@ -29,6 +29,6 @@ export let room = {
       ??°
     {/if}
   </div>
-  <div class="name">{room.name}</div>
+  <div class="name"><a href={'/program?room=' + room.room_id}>{room.name}</a></div>
 </div>
 
