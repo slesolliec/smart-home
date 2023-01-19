@@ -43,4 +43,8 @@ log.tuya = function (msg) {
 	logger(colors.magenta(msg))
 }
 
+log.program = function (msg) {
+	logger(colors.yellow(msg))
+}
+
 export default log

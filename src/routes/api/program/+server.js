@@ -9,9 +9,7 @@ import { redirect } from '@sveltejs/kit'
 export async function POST({request}) {
 
   const data = await request.formData()
-  console.log(data)
-
-  // log.debug(`set mode ${data.get('mode_id')} for user ${data.get('user_id')} on weekday ${data.get('weekday')}`)
+  // console.log(data)
 
   if (data.get('action') == 'add') {
     await addTemp(data)
@@ -22,8 +20,7 @@ export async function POST({request}) {
     if (action == 'delete') await deleteTemp(data, hour)
   }
 
-
-
+  // handle redirect to proper page
   let url = []
   if (data.get('selected_user') > -1) url.push('user=' + data.get('selected_user')) 
   if (data.get('selected_mode') > -1) url.push('mode=' + data.get('selected_mode')) 
@@ -56,6 +53,8 @@ async function addTemp(data) {
       temp:  data.get('temp')
     })
   }
+
+  log.program(`target temp set ${data.get('hour')}=>${data.get('temp')}° for mode=${data.get('mode_id')} user=${data.get('user_id')} room=${data.get('room_id')}`)
 }
 
 async function changeTemp(data, hour) {
@@ -79,6 +78,7 @@ async function changeTemp(data, hour) {
       temp:  data.get('temp-' + hour)
     })
   }
+  log.program(`target temp set ${data.get('hour')}=>${data.get('temp')}° for mode=${data.get('mode_id')} user=${data.get('user_id')} room=${data.get('room_id')}`)
 }
 
 
@@ -89,4 +89,5 @@ async function deleteTemp(data, hour) {
     room_id: data.get('room_id'),
     hour:  hour
   }})
+  log.program(`target temp deleted ${data.get('hour')}=>☠️ for mode=${data.get('mode_id')} user=${data.get('user_id')} room=${data.get('room_id')}`)
 }

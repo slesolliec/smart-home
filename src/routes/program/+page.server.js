@@ -15,9 +15,7 @@ export async function load({url}) {
   if (search.get('room')) selected.room = search.get('room')
 
 
-  const rooms  = JSON.parse(JSON.stringify(await RoomCurrent.findAll({where: {
-    smart_plug: {[Op.not]: ''}
-  }})))
+  const rooms  = JSON.parse(JSON.stringify(await RoomCurrent.findAll()))
   const modes  = JSON.parse(JSON.stringify(await Mode.findAll()))
 
   const people = JSON.parse(JSON.stringify(await User.findAll({
