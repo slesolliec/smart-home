@@ -1,5 +1,4 @@
 
-import rooms         from "$lib/server/rooms"
 import TuyAPI        from 'tuyapi'
 import getTuyaKey    from "$lib/server/tuya-keys"
 import log           from "$lib/server/log"
@@ -8,13 +7,22 @@ import { Room, SmartPlug } from "./db"
 import { Op }        from 'sequelize'
 
 
+function handleTuyaDeviceError(err) {
+  log.error("Tuya device error:")
+  console.log(err)
+}
+
+
 async function getAllData() {
 
   const rooms = await Room.findAll({where: { smart_plug: {[Op.not]: ''}}})
 
   for (const room of rooms) {
 
+    // getting data from smart plug
     const device = new TuyAPI({id: room.smart_plug, key: getTuyaKey(room.smart_plug)})
+    device.on('error', handleTuyaDeviceError)
+
     try {
       await device.find()
       await device.connect()
@@ -48,25 +56,13 @@ async function getAllData() {
       log.tuya("Failed getting state in " + room.name + ": " + err)
       console.log(err)
     }
-
-    /*
-    if (room.tuyaSensor) {
-      console.log('getting temp from ' + room.name)
-      const device = new TuyAPI({id: room.tuyaSensor, key: getTuyaKey(room.tuyaSensor)})
-      await device.find()
-      await device.connect()
-      const {dps} = await device.get({schema: true})
-      console.log(dps)
-      await device.disconnect()
-    }
-    */
   }
-
-
 }
 
 async function switchPlug(switchOn = true, tuyaId = '') {
   const device = new TuyAPI({id: tuyaId, key: getTuyaKey(tuyaId)})
+  device.on('error', handleTuyaDeviceError)
+
   try {
     await device.find()
     await device.connect()
