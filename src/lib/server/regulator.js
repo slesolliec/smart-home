@@ -3,8 +3,7 @@ import log  from "$lib/server/log"
 import { switchPlug }        from "$lib/server/tuya"
 import { RoomCurrent }       from "$lib/server/db"
 import { getState }          from "$lib/server/state"
-import { switchVentilation } from "$lib/server/rfxcom"
-
+import { switchHeaterOff, switchHeaterOn, switchVentilation } from "$lib/server/rfxcom"
 
 
 async function switcher() {
@@ -12,26 +11,39 @@ async function switcher() {
 
   let rooms = await getState()
 
+  // console.log(rooms)
+
   // we loop on rooms
   for (const i in rooms) {
     let room = rooms[i]
 
-    if (room.smart_plug) {
-      const dbRoom = await RoomCurrent.findOne({where: {room_id: room.room_id}})
-
-      log.debug(room.name +' : '+ (dbRoom.temp / 10) +' => '+ room.target.temp)
-
-      if ( (dbRoom.temp / 10) < room.target.temp) {
+    // palier
+    if (room.dio_heater) {
+      if ((room.temp / 10) < room.target.temp) {
         // too cold
-        if ( ! dbRoom.is_on) {
-          log.info(`We switch ${room.name} On`)
-          switchPlug(true, dbRoom.smart_plug)
+        switchHeaterOn(room)
+      } else {
+        // too hot
+        switchHeaterOff(room)
+      }
+
+    } else if (room.smart_plug) {
+      // in case that room does not have a DIO switch
+      // we will use the available Smart Plugs to power
+      // the heaters
+
+      // log.debug(room.name +' : '+ (room.temp / 10) +' => '+ room.target.temp)
+      if ( (room.temp / 10) < room.target.temp) {
+        // too cold
+        if ( ! room.is_on) {
+          log.info(`🟢 We switch ${room.name} On`)
+          switchPlug(true, room.smart_plug)
         }
       } else {
         // too hot
-        if (dbRoom.is_on) {
-          log.info(`we switch ${room.name} Off`)
-          switchPlug(false, dbRoom.smart_plug)
+        if (room.is_on) {
+          log.info(`🔴 We switch ${room.name} Off`)
+          switchPlug(false, room.smart_plug)
         }
       }
     }
@@ -39,14 +51,15 @@ async function switcher() {
 }
 
 
+// switching VMC in bathroom in case hydrometry is above threshold
 async function switchVent() {
   const SdBain = await RoomCurrent.findOne({where: {room_id: 7}})
 
-  console.log('Hydro SdBain =', SdBain.hydro)
-
-  if (SdBain.hydro > 75) {
+  if (SdBain.hydro > 70) {
+    log.debug(`😰 Hydro SdBain = ${SdBain.hydro}%`)
     switchVentilation(true)
   } else {
+    log.debug(`🙂 Hydro SdBain = ${SdBain.hydro}%`)
     switchVentilation(false)
   }
 }

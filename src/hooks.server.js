@@ -15,11 +15,11 @@ getAllData()
 
 let tuyaInterval
 if (! tuyaInterval) {
-  setInterval(getAllData, 300 * 1000)
+  setInterval(getAllData, 360 * 1000)
 }
 
 
 switcher(false)
 
-setInterval(switcher,   300 * 1000)
+setInterval(switcher,   150 * 1000)
 setInterval(switchVent, 300 * 1000)

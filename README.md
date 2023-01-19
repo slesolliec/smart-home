@@ -61,9 +61,10 @@ Just so that I remember which heater is associated with which button:
 
 | Bottom Selector | Button  | Code | Hardware      |
 | :---:           | :----:  | ---: | :---          |
+| B               | 1       |  05  | Salon         Inverted |
 | D               | 1       |  13  | Bathroom vent |
-| D               | 2       |  14  | Heater Palier Reversed |
+| D               | 2       |  14  | Heater Palier Inverted |
 
-
+Inverted heaters are wired on the pilot thread, which means that when the relay switch is ON, this will send a STOP order via the pilot thread.
 
 

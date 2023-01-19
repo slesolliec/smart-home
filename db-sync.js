@@ -2,6 +2,7 @@
 import { Mode, Room, SmartPlug, Thermo, User, Week, Program } from "./src/lib/server/db.js"
 
 async function dbSync() {
+  await Room  .sync({alter: true})
 
   return
 
@@ -20,11 +21,10 @@ async function dbSync() {
   return
 
   await User  .sync({force: true})
-  await Room  .sync({force: true})
   await Thermo.sync({force: true})
   await SmartPlug.sync({force: true})
 
-
+  
   // standing data
   Room.bulkCreate([
     {room_id:  1, name: 'Matys',   sensor: '0xFF01', smart_plug: 'bfb7fd9135eb2dd73egztw'},

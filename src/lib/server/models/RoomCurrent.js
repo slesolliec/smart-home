@@ -7,6 +7,8 @@ const defineRoomCurrent = function(sequelize, DataTypes) {
         name:       { type: DataTypes.STRING(10) },
         sensor:     { type: DataTypes.CHAR(6)},
         smart_plug: { type: DataTypes.CHAR(22)},
+        dio_heater: { type: DataTypes.SMALLINT},
+        dio_is_inverted: { type: DataTypes.BOOLEAN},
         temp:       { type: DataTypes.SMALLINT},
         hydro:      { type: DataTypes.SMALLINT},
         is_on:      { type: DataTypes.BOOLEAN},

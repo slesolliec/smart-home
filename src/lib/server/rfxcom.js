@@ -1,17 +1,16 @@
 // rfxcom will receive the room state object from hook.server.js
 
 import rfxcom, { Lighting2 } from 'rfxcom'
-import log    from '$lib/server/log'
-import { minString } from '$lib/utils'
-import { Room, Thermo } from './db'
+import log                   from '$lib/server/log'
+import { minString }         from '$lib/utils'
+import { Room, Thermo }      from './db'
 
 const rfxtrx = new rfxcom.RfxCom("/dev/tty.usbserial-A1QBWMO", {debug: false})
 const telecommande = new Lighting2(rfxtrx, rfxcom.lighting2.AC)
+// 0x25072F is the prefix of my DIO remote control
+const remotePrefix = "0x25072F/"
 
 // const velux = new rfxcom.Rfy(rfxtrx, rfxcom.rfy.RFY)
-
-// const contact = new rfxcom.Lighting2(rfxtrx, rfxcom.lighting2.AC)
-
 
 
 /*
@@ -28,25 +27,13 @@ setInterval(function() {
 */
 
 
-/*
-setInterval(function() {
-  contact.switchOn("0x11/1", function(err, res, seqNum) {
-    console.log('err=', err)
-    console.log('res=', res)
-    console.log('seqNum=', seqNum)
-  })
-}, 30 * 1000)
-*/
-
-// this will hold the reference to the room.js module
 
 function start() {
 
-  // at start, we set the rooms to the reference of the room object
-  console.log('starting sensor')
+  console.log('RFXcom initialization')
 
   rfxtrx.initialise(function () {
-    console.log("Device initialised")
+    console.log("RFXcom initialized")
   })
 }
 
@@ -84,13 +71,37 @@ async function receiveTemp(evt) {
   log.debug(minString(room.name, 8) + ' updated to ' + minString(evt.temperature, 4, false) + '°')
 }
 
-function switchVentilation(switchOn = false) {
-  if (switchOn) {
-    telecommande.switchOn("0x25072F/13")
+
+/**
+ * 
+ * @param {Room} room 
+ */
+function switchHeaterOn(room) {
+  log.debug(`🟢 We switch on  ${room.name}`)
+  if (room.dio_is_inverted) {
+    telecommande.switchOff(remotePrefix + room.dio_heater)
   } else {
-    telecommande.switchOff("0x25072F/13")
+    telecommande.switchOn(remotePrefix + room.dio_heater)
+  }
+}
+
+function switchHeaterOff(room) {
+  log.debug(`🔴 We switch off ${room.name}`)
+  if (room.dio_is_interded) {
+    telecommande.switchOn(remotePrefix + room.dio_heater)
+  } else {
+    telecommande.switchOff(remotePrefix + room.dio_heater)
   }
 }
 
 
-export { start, switchVentilation }
+function switchVentilation(switchOn = false) {
+  if (switchOn) {
+    telecommande.switchOn(remotePrefix + "13")
+  } else {
+    telecommande.switchOff(remotePrefix + "13")
+  }
+}
+
+
+export { start, switchVentilation, switchHeaterOn, switchHeaterOff }
