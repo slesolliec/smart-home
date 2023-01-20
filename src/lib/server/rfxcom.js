@@ -87,7 +87,7 @@ function switchHeaterOn(room) {
 
 function switchHeaterOff(room) {
   log.debug(`🔴 We switch off ${room.name}`)
-  if (room.dio_is_interded) {
+  if (room.dio_is_inverted) {
     telecommande.switchOn(remotePrefix + room.dio_heater)
   } else {
     telecommande.switchOff(remotePrefix + room.dio_heater)
