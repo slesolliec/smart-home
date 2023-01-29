@@ -57,6 +57,8 @@ async function chooseMode(mode_id) {
 
 <div class="room">
   Puissance totale : <strong>{power}W</strong>
+  &nbsp;&nbsp;&nbsp;&nbsp;
+  <a href="https://mon-compte-particulier.enedis.fr/suivi-de-mesures/">Enedis</a>
 </div>
 
 
